@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Home from "./containers/Home";
 import About from "./containers/About";
 import Login from "./containers/Login";
+import Dashboard from "./containers/Dashboard";
 import SignupRoutes from "./routes/SignupRoutes";
 
 const Routes = () => (
@@ -15,6 +16,7 @@ const Routes = () => (
         <Route path="/about" component={About} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={SignupRoutes} />
+        <Route path="/dashboard" component={Dashboard} />
       </Switch>
     </div>
   </BrowserRouter>

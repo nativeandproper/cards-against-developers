@@ -18,7 +18,7 @@ export default class Login extends React.Component {
 
   handleChange = (key, value) => {
     this.setState({
-      key: value
+      [key]: value
     });
   };
 
@@ -28,7 +28,9 @@ export default class Login extends React.Component {
 
     apiClient("POST", "/login", request)
       .then(res => {
-        // TODO: redirect user
+        this.props.history.push("/dashboard", {
+          firstName: this.state.firstName
+        });
       })
       .catch(err => {
         err.text().then(errorMsg => {

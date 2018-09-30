@@ -64,14 +64,14 @@ class Signup extends React.Component {
 
     if (this.isValidForm()) {
       const { firstName, lastName, email, password } = this.state;
-      const request = { email, firstName, lastName, password };
-
-      apiClient("POST", "/signup", {
+      const request = {
         first_name: firstName,
         last_name: lastName,
-        password,
-        email
-      })
+        email,
+        password
+      };
+
+      apiClient("POST", "/signup", request)
         .then(res => {
           this.props.history.push("/signup/confirmation", {
             firstName: this.state.firstName
