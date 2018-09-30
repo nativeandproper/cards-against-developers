@@ -9,7 +9,7 @@ export default function api(method, url, data) {
   return fetch(`${env.API_ROOT}${url}`, {
     body: JSON.stringify(data),
     // TODO: use session token auth for user requests and api token for api requests
-    credentials: "include",
+    //credentials: "include",
     headers: defaultHeaders,
     method: method.toUpperCase()
   }).then(res => {

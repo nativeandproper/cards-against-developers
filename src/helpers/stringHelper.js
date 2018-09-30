@@ -3,14 +3,14 @@ import * as R from "ramda";
 export const invalidFirstName = firstName => {
   return (
     R.isEmpty(firstName) ||
-    R.gt(firstName.length, 32) ||
+    R.gt(firstName.length, 10) ||
     R.lt(firstName.length, 3)
   );
 };
 
 export const invalidLastName = lastName => {
   return (
-    R.isEmpty(lastName) || R.gt(lastName.length, 32) || R.lt(lastName.length, 3)
+    R.isEmpty(lastName) || R.gt(lastName.length, 10) || R.lt(lastName.length, 3)
   );
 };
 
@@ -25,6 +25,6 @@ export const invalidEmail = email => {
 
 export const invalidPassword = password => {
   return (
-    R.isEmpty(password) || R.lt(password.length, 5) || R.gt(password.length, 32)
+    R.isEmpty(password) || R.lt(password.length, 8) || R.gt(password.length, 10)
   );
 };

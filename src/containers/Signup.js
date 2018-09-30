@@ -66,7 +66,12 @@ class Signup extends React.Component {
       const { firstName, lastName, email, password } = this.state;
       const request = { email, firstName, lastName, password };
 
-      apiClient("POST", "/signup", request)
+      apiClient("POST", "/signup", {
+        first_name: firstName,
+        last_name: lastName,
+        password,
+        email
+      })
         .then(res => {
           this.props.history.push("/signup/confirmation", {
             firstName: this.state.firstName
@@ -107,7 +112,7 @@ class Signup extends React.Component {
         <h1>Sign Up</h1>
         <div className="login-signup-form">
           <div className={firstNameErrorClasses}>
-            You first name cannot be empty and must be between 3 and 32
+            You first name cannot be empty and must be between 3 and 10
             characters
           </div>
           <input
@@ -117,7 +122,7 @@ class Signup extends React.Component {
             onChange={e => this.handleChange("firstName", e.target.value)}
           />
           <div className={lastNameErrorClasses}>
-            Your last name cannot be empty and must be between 3 and 32
+            Your last name cannot be empty and must be between 3 and 10
             characters
           </div>
           <input
@@ -136,7 +141,7 @@ class Signup extends React.Component {
             onChange={e => this.handleChange("email", e.target.value)}
           />
           <div className={passwordErrorClasses}>
-            Your password must be between 5 and 32 characters
+            Your password must be between 6 and 10 characters
           </div>
           <input
             type="password"
