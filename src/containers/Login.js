@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 import apiClient from "../lib/apiClient";
 
+import { invalidEmail } from "../helpers/stringHelper";
+
 import "../styles/LoginSignup.css";
 
 export default class Login extends React.Component {
@@ -22,9 +24,26 @@ export default class Login extends React.Component {
     });
   };
 
+  isInvalidEmail = () => {
+    const invalid = invalidEmail(this.state.email);
+
+    if (invalid) {
+      this.setState({
+        loginError:
+          "email must be less than 32 characters and contain an '@' sign"
+      });
+    }
+
+    return invalid;
+  };
+
   login = () => {
     const { email, password } = this.state;
     const request = { email, password };
+
+    if (this.isInvalidEmail()) {
+      return;
+    }
 
     apiClient("POST", "/login", request)
       .then(res => {
