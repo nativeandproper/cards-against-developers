@@ -7,6 +7,7 @@ import About from "./containers/About";
 import Login from "./containers/Login";
 import Dashboard from "./containers/Dashboard";
 import SignupRoutes from "./routes/SignupRoutes";
+import NotFound from "./components/NotFound";
 
 const Routes = () => (
   <BrowserRouter>
@@ -17,6 +18,7 @@ const Routes = () => (
         <Route path="/login" component={Login} />
         <Route path="/signup" component={SignupRoutes} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route component={NotFound} />
       </Switch>
     </div>
   </BrowserRouter>
