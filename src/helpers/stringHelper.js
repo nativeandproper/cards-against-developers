@@ -25,6 +25,6 @@ export const invalidEmail = email => {
 
 export const invalidPassword = password => {
   return (
-    R.isEmpty(password) || R.lt(password.length, 8) || R.gt(password.length, 10)
+    R.isEmpty(password) || R.lt(password.length, 6) || R.gt(password.length, 10)
   );
 };

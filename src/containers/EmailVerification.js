@@ -1,42 +1,48 @@
 import React from "react";
 import apiClient from "../lib/apiClient";
 
+import ButtonLink from "../components/ButtonLink";
+
 export default class EmailVerification extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isValidConfirmation: false,
       confirmationError: ""
     };
   }
 
   componentDidMount = () => {
-    console.log("params", this.props.match.params);
     const request = {
       verification_token: this.props.match.params.emailConfirmationId
     };
 
-    apiClient("PUT", "/signup", request)
-      .then(res => {
-        console.log("RES", res);
-      })
-      .catch(err => {
-        console.log("ERR", err);
-        // err.text().then(errorMsg => {
-        //   this.setState({
-        //     confirmationError: errorMsg
-        //   });
-        // });
+    apiClient("PUT", "/signup", request).catch(err => {
+      err.text().then(errorMsg => {
+        this.setState({
+          confirmationError: errorMsg
+        });
       });
+    });
   };
 
   render() {
-    console.log("skeep");
     return (
       <div className="pre-confirmation">
-        <h1>Preconfirmation page</h1>
-        <p>Email has been verified. You're good to start accessing the API.</p>
+        <h1>Email Verification</h1>
+        {this.state.confirmationError && (
+          <div>
+            <h2>Sorry, this email confirmation code can't be validated.</h2>
+            <h3>{this.state.confirmationError}</h3>
+          </div>
+        )}
+
+        {!this.state.confirmationError && (
+          <div>
+            <p>Email has been verified.</p>
+            <ButtonLink to="/dashboard" classes="nav-button" name="dashboard" />
+          </div>
+        )}
       </div>
     );
   }
