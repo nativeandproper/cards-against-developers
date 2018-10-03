@@ -12,9 +12,11 @@ export default class EmailVerification extends React.Component {
   }
 
   componentDidMount = () => {
+    console.log("params", this.props.match.params);
     const request = {
-      verification_token: this.props.match.params.confirmationID
+      verification_token: this.props.match.params.emailConfirmationId
     };
+
     apiClient("PUT", "/signup", request)
       .then(res => {
         console.log("RES", res);
@@ -30,6 +32,7 @@ export default class EmailVerification extends React.Component {
   };
 
   render() {
+    console.log("skeep");
     return (
       <div className="pre-confirmation">
         <h1>Preconfirmation page</h1>

@@ -12,7 +12,7 @@ const SignupRoutes = ({ match }) => (
     <Route
       exact={false}
       strict={true}
-      path={`${match.url}/confirmation/:confirmationID`}
+      path={`${match.url}/confirmation/:emailConfirmationId`}
       render={props => <EmailVerification {...props} />}
     />
     <Route
