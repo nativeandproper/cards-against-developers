@@ -1,0 +1,31 @@
+.not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+
+  .not-found-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vw;
+    width: 60vw;
+  }
+
+  .not-found-icon {
+    background-image: url("../assets/images/man_on_fire.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 200px;
+    height: 200px;
+    margin-top: 10px;
+  }
+
+  h2 {
+    margin: 10px;
+  }
+}
