@@ -24,24 +24,16 @@ export default class Login extends React.Component {
     });
   };
 
-  isInvalidEmail = () => {
-    const invalid = invalidEmail(this.state.email);
-
-    if (invalid) {
-      this.setState({
-        loginError:
-          "email must be less than 32 characters and contain an '@' sign"
-      });
-    }
-
-    return invalid;
-  };
-
   login = () => {
     const { email, password } = this.state;
     const request = { email, password };
 
-    if (this.isInvalidEmail()) {
+    // invalid email
+    if (invalidEmail(this.state.email)) {
+      this.setState({
+        loginError:
+          "email must be less than 32 characters and contain an '@' sign"
+      });
       return;
     }
 
