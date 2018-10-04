@@ -32,7 +32,7 @@ export default class EmailVerification extends React.Component {
         <h1>Email Verification</h1>
         {this.state.confirmationError && (
           <div>
-            <h2>Sorry, this email confirmation code can't be validated.</h2>
+            <h2>{`Sorry, this email confirmation code can't be validated.`}</h2>
             <h3>{this.state.confirmationError}</h3>
           </div>
         )}
