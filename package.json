@@ -21,7 +21,7 @@
     "deploy": "aws s3 sync ./build s3://cards-against-developers-web",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "pretty": "prettier --write \"**/*.js\""
+    "format": "prettier --write \"**/*.js\""
   },
   "devDependencies": {
     "prettier": "^1.14.3"
