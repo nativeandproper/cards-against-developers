@@ -19,13 +19,13 @@ export default class EmailVerification extends React.Component {
       verification_token: this.props.match.params.emailConfirmationId
     };
 
-    // apiClient("PUT", "/signup", request).catch(err => {
-    //   err.text().then(errorMsg => {
-    //     this.setState({
-    //       confirmationError: errorMsg
-    //     });
-    //   });
-    // });
+    apiClient("PUT", "/signup", request).catch(err => {
+      err.text().then(errorMsg => {
+        this.setState({
+          confirmationError: errorMsg
+        });
+      });
+    });
   };
 
   render() {
