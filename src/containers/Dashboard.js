@@ -17,6 +17,7 @@ export default class Login extends React.Component {
       })
       .catch(err => {
         err.text().then(errorMsg => {
+          console.log("ERROR MSG FROM LOGGING OUT***:", errorMsg);
           this.setState({
             logoutError: errorMsg
           });
@@ -24,7 +25,19 @@ export default class Login extends React.Component {
       });
   };
 
-  // TODO: add error handling from logout
+  // TODO: this is here to test the auth middleware; can be removed after testing.
+  componentDidMount = () => {
+    apiClient("GET", "/user/29/apikey")
+      .then(res => {
+        console.log("RES FROM FETCHING API KEYS***:", res);
+      })
+      .catch(err => {
+        err.text().then(errorMsg => {
+          console.log("ERROR MSG FROM FETCHING API KEYS:", errorMsg);
+        });
+      });
+  };
+
   render() {
     return (
       <div className="dashboard">
