@@ -10,7 +10,7 @@ export default class EmailVerification extends React.Component {
     super(props);
 
     this.state = {
-      confirmationError: "a"
+      confirmationError: ""
     };
   }
 
