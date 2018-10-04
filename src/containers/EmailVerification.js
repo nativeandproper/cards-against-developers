@@ -34,8 +34,8 @@ export default class EmailVerification extends React.Component {
         <h1>Oh no!</h1>
         <div className="not-bud-img bud-img" />
         <h1>
-          For whatever reason, this email can't be validated. Please try the
-          link again.
+          {`For whatever reason, this email can't be validated. Please try the
+          link again.`}
         </h1>
         <p>
           If the problem persists,{" "}
