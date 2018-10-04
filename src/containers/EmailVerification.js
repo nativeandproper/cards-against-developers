@@ -38,7 +38,7 @@ export default class EmailVerification extends React.Component {
           link again.`}
         </h1>
         <p>
-          If the problem persists,{" "}
+          If the problem persists, 
           <a href="mailto:nativeandproper@gmail.com">contact us</a> and we'll
           get to the bottom of it (or the top of it).
         </p>
