@@ -20,7 +20,8 @@
     "build": "npm-run-all build-css build-js",
     "deploy": "aws s3 sync ./build s3://cards-against-developers-web",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --write \"**/*.js\""
   },
   "devDependencies": {
     "prettier": "^1.14.3"
