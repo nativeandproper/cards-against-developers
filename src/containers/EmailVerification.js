@@ -19,13 +19,13 @@ export default class EmailVerification extends React.Component {
       verification_token: this.props.match.params.emailConfirmationId
     };
 
-    apiClient("PUT", "/signup", request).catch(err => {
-      err.text().then(errorMsg => {
-        this.setState({
-          confirmationError: errorMsg
-        });
-      });
-    });
+    // apiClient("PUT", "/signup", request).catch(err => {
+    //   err.text().then(errorMsg => {
+    //     this.setState({
+    //       confirmationError: errorMsg
+    //     });
+    //   });
+    // });
   };
 
   render() {
@@ -38,9 +38,9 @@ export default class EmailVerification extends React.Component {
           link again.`}
         </h1>
         <p>
-          If the problem persists, 
-          <a href="mailto:nativeandproper@gmail.com">contact us</a> and we'll
-          get to the bottom of it (or the top of it).
+          {`If the problem persists, `}
+          <a href="mailto:nativeandproper@gmail.com">contact us</a> {`and we'll
+          get to the bottom of it (or the top of it).`}
         </p>
       </div>
     ) : (
