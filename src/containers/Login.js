@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import produce from "immer";
 
 import apiClient from "../lib/apiClient";
 
@@ -19,9 +20,11 @@ export default class Login extends React.Component {
   }
 
   handleChange = (key, value) => {
-    this.setState({
-      [key]: value
-    });
+    this.setState(
+      produce(draft => {
+        draft[key] = value
+      })
+    );
   };
 
   login = e => {
@@ -32,10 +35,12 @@ export default class Login extends React.Component {
 
     // invalid email
     if (invalidEmail(this.state.email)) {
-      this.setState({
-        loginError:
-          "email must be less than 32 characters and contain an '@' sign"
-      });
+      this.setState(
+        produce(draft => {
+          draft.loginError = "email must be less than 32 characters and contain an '@' sign"
+        })
+      );
+      
       return;
     }
 
@@ -47,9 +52,11 @@ export default class Login extends React.Component {
       })
       .catch(err => {
         err.text().then(errorMsg => {
-          this.setState({
-            loginError: errorMsg
-          });
+          this.setState(
+            produce(draft => {
+              draft.loginError = errorMsg
+            })
+          );
         });
       });
   };
