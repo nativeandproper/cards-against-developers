@@ -24,7 +24,9 @@ export default class Login extends React.Component {
     });
   };
 
-  login = () => {
+  login = e => {
+    e.preventDefault();
+
     const { email, password } = this.state;
     const request = { email, password };
 
@@ -57,26 +59,32 @@ export default class Login extends React.Component {
       <div className="login-signup">
         <h1>Log In</h1>
         <div className="login-signup-form">
-          <input
-            type="text"
-            placeholder="email"
-            value={this.state.email}
-            onChange={e => this.handleChange("email", e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="password"
-            value={this.state.password}
-            onChange={e => this.handleChange("password", e.target.value)}
-          />
-          {this.state.loginError && (
-            <div className="error error-show">{this.state.loginError}</div>
-          )}
+          <form onSubmit={this.login}>
+            <input
+              type="text"
+              placeholder="email"
+              value={this.state.email}
+              onChange={e => this.handleChange("email", e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="password"
+              value={this.state.password}
+              onChange={e => this.handleChange("password", e.target.value)}
+            />
+            {this.state.loginError && (
+              <div className="error error-show">{this.state.loginError}</div>
+            )}
+            <button
+              type="submit"
+              className="submit-button"
+              onClick={this.login}
+            >
+              login
+            </button>
+          </form>
         </div>
         <div className="login-signup-cta">
-          <button className="submit-button" onClick={this.login}>
-            login
-          </button>
           <div className="login-signup-text">
             No account?{" "}
             <Link to="/signup" className="cta-link">
