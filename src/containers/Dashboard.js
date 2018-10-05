@@ -2,7 +2,7 @@ import React from "react";
 
 import apiClient from "../lib/apiClient";
 
-export default class Login extends React.Component {
+export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

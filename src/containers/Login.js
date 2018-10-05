@@ -40,7 +40,7 @@ export default class Login extends React.Component {
           draft.loginError = "email must be less than 32 characters and contain an '@' sign"
         })
       );
-      
+
       return;
     }
 
