@@ -1,10 +1,12 @@
 import React from "react";
+import produce from "immer";
 
 import apiClient from "../lib/apiClient";
 
 export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       logoutError: ""
     };
@@ -17,9 +19,11 @@ export default class Dashboard extends React.Component {
       })
       .catch(err => {
         err.text().then(errorMsg => {
-          this.setState({
-            logoutError: errorMsg
-          });
+          this.setState(
+            produce(draft => {
+              draft.logoutError = errorMsg;
+            })
+          );
         });
       });
   };
