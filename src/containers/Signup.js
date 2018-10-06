@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import produce from "immer";
 
 import apiClient from "../lib/apiClient";
 import {
@@ -30,9 +31,11 @@ class Signup extends React.Component {
   }
 
   handleChange = (key, value) => {
-    this.setState({
-      [key]: value
-    });
+    this.setState(
+      produce(draft => {
+        draft[key] = value
+      })
+    );
   };
 
   isValidForm = () => {
@@ -41,12 +44,14 @@ class Signup extends React.Component {
     const emailHasError = invalidEmail(this.state.email);
     const passwordHasError = invalidPassword(this.state.password);
 
-    this.setState({
-      emailHasError,
-      firstNameHasError,
-      lastNameHasError,
-      passwordHasError
-    });
+    this.setState(
+      produce(draft => {
+        draft.emailHasError = emailHasError;
+        draft.firstNameHasError = firstNameHasError;
+        draft.lastNameHasError = lastNameHasError;
+        draft.passwordHasError = passwordHasError;
+      })
+    );
 
     return (
       !firstNameHasError &&
@@ -59,10 +64,12 @@ class Signup extends React.Component {
   validateAndSubmit = e => {
     e.preventDefault();
 
-    this.setState({
-      accountError: "",
-      attemptedSubmit: true
-    });
+    this.setState(
+      produce(draft => {
+        draft.accountError = "";
+        draft.attemptedSubmit = true;
+      })
+    );
 
     if (this.isValidForm()) {
       const { firstName, lastName, email, password } = this.state;
@@ -81,9 +88,11 @@ class Signup extends React.Component {
         })
         .catch(err => {
           err.text().then(errorMsg => {
-            this.setState({
-              accountError: errorMsg
-            });
+            this.setState(
+              produce(draft => {
+                draft.accountError = errorMsg;
+              })
+            );
           });
         });
     }
