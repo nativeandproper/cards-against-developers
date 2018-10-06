@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import produce from "immer";
 
 import apiClient from "../lib/apiClient";
 import {
@@ -30,9 +31,11 @@ class Signup extends React.Component {
   }
 
   handleChange = (key, value) => {
-    this.setState({
-      [key]: value
-    });
+    this.setState(
+      produce(draft => {
+        draft[key] = value
+      })
+    );
   };
 
   isValidForm = () => {
@@ -41,12 +44,14 @@ class Signup extends React.Component {
     const emailHasError = invalidEmail(this.state.email);
     const passwordHasError = invalidPassword(this.state.password);
 
-    this.setState({
-      emailHasError,
-      firstNameHasError,
-      lastNameHasError,
-      passwordHasError
-    });
+    this.setState(
+      produce(draft => {
+        draft.emailHasError = emailHasError;
+        draft.firstNameHasError = firstNameHasError;
+        draft.lastNameHasError = lastNameHasError;
+        draft.passwordHasError = passwordHasError;
+      })
+    );
 
     return (
       !firstNameHasError &&
@@ -57,10 +62,14 @@ class Signup extends React.Component {
   };
 
   validateAndSubmit = e => {
-    this.setState({
-      accountError: "",
-      attemptedSubmit: true
-    });
+    e.preventDefault();
+
+    this.setState(
+      produce(draft => {
+        draft.accountError = "";
+        draft.attemptedSubmit = true;
+      })
+    );
 
     if (this.isValidForm()) {
       const { firstName, lastName, email, password } = this.state;
@@ -79,13 +88,13 @@ class Signup extends React.Component {
         })
         .catch(err => {
           err.text().then(errorMsg => {
-            this.setState({
-              accountError: errorMsg
-            });
+            this.setState(
+              produce(draft => {
+                draft.accountError = errorMsg;
+              })
+            );
           });
         });
-    } else {
-      e.preventDefault();
     }
   };
 
@@ -111,52 +120,54 @@ class Signup extends React.Component {
       <div className="login-signup">
         <h1>Sign Up</h1>
         <div className="login-signup-form">
-          <div className={firstNameErrorClasses}>
-            You first name cannot be empty and must be between 3 and 10
-            characters
-          </div>
-          <input
-            type="text"
-            placeholder="first name"
-            value={this.state.firstName}
-            onChange={e => this.handleChange("firstName", e.target.value)}
-          />
-          <div className={lastNameErrorClasses}>
-            Your last name cannot be empty and must be between 3 and 10
-            characters
-          </div>
-          <input
-            type="text"
-            placeholder="last name"
-            value={this.state.lastName}
-            onChange={e => this.handleChange("lastName", e.target.value)}
-          />
-          <div className={emailErrorClasses}>
-            Your email must be a valid email e.g. nativeandproper@gmail.com
-          </div>
-          <input
-            type="text"
-            placeholder="email"
-            value={this.state.email}
-            onChange={e => this.handleChange("email", e.target.value)}
-          />
-          <div className={passwordErrorClasses}>
-            Your password must be between 6 and 10 characters
-          </div>
-          <input
-            type="password"
-            placeholder="password"
-            value={this.state.password}
-            onChange={e => this.handleChange("password", e.target.value)}
-          />
-          {this.state.accountError && (
-            <div className="error error-show">{this.state.accountError}</div>
-          )}
+          <form onSubmit={this.validateAndSubmit}>
+            <div className={firstNameErrorClasses}>
+              You first name cannot be empty and must be between 3 and 10
+              characters
+            </div>
+            <input
+              type="text"
+              placeholder="first name"
+              value={this.state.firstName}
+              onChange={e => this.handleChange("firstName", e.target.value)}
+            />
+            <div className={lastNameErrorClasses}>
+              Your last name cannot be empty and must be between 3 and 10
+              characters
+            </div>
+            <input
+              type="text"
+              placeholder="last name"
+              value={this.state.lastName}
+              onChange={e => this.handleChange("lastName", e.target.value)}
+            />
+            <div className={emailErrorClasses}>
+              Your email must be a valid email e.g. nativeandproper@gmail.com
+            </div>
+            <input
+              type="text"
+              placeholder="email"
+              value={this.state.email}
+              onChange={e => this.handleChange("email", e.target.value)}
+            />
+            <div className={passwordErrorClasses}>
+              Your password must be between 6 and 10 characters
+            </div>
+            <input
+              type="password"
+              placeholder="password"
+              value={this.state.password}
+              onChange={e => this.handleChange("password", e.target.value)}
+            />
+            {this.state.accountError && (
+              <div className="error error-show">{this.state.accountError}</div>
+            )}
+            <button className="submit-button" onClick={this.validateAndSubmit}>
+              submit
+            </button>
+          </form>
         </div>
         <div className="login-signup-cta">
-          <button className="submit-button" onClick={this.validateAndSubmit}>
-            submit
-          </button>
           <div className="login-signup-text">
             Have an account?{" "}
             <Link to="/login" className="cta-link">
