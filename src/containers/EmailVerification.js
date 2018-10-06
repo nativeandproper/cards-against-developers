@@ -1,5 +1,6 @@
 import React from "react";
 import apiClient from "../lib/apiClient";
+import produce from "immer";
 
 import ButtonLink from "../components/ButtonLink";
 
@@ -21,9 +22,11 @@ export default class EmailVerification extends React.Component {
 
     apiClient("PUT", "/signup", request).catch(err => {
       err.text().then(errorMsg => {
-        this.setState({
-          confirmationError: errorMsg
-        });
+        this.setState(
+          produce(draft => {
+            draft.confirmationError = errorMsg;
+          })
+        );
       });
     });
   };
