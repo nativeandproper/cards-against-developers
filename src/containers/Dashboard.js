@@ -41,6 +41,7 @@ export default class Dashboard extends React.Component {
   onLogout = () => {
     apiClient("POST", "/logout")
       .then(res => {
+        localStorage.removeItem("cah-token");
         this.props.history.push("/login", null);
       })
       .catch(err => {
