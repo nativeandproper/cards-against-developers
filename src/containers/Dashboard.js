@@ -18,12 +18,24 @@ export default class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    // TODO: make GET request here for api keys
-    this.setState(
-      produce(draft => {
-        draft.apiKeys = [{"id":12,"api_key":"knIPKsshNCMmvmW8ISIh4l8T9lr60kPDjzcSTfP5MVs=","created_at":"2018-10-04T17:50:17.786205Z","deleted_at":null},{"id":13,"api_key":"UdogxNDHi6UEKmvgUr11kxmhNnQPwIVlGO2kVLvr/aY=","created_at":"2018-10-04T18:02:57.458858Z","deleted_at":"2018-10-04T18:38:45.805715Z"},{"id":14,"api_key":"Gfs3Zud4G1i7b+YoncR8cTc3e1JajAoTuylhzY6TrGk=","created_at":"2018-10-04T18:42:11.771701Z","deleted_at":null},{"id":11,"api_key":"OOCpTkkTqo29tREUTFX+Yi+8Kwdk2iWUMx2JJ06Jd0A=","created_at":"2018-10-04T17:49:34.293472Z","deleted_at":"2018-10-04T19:03:43.022139Z"}];
+    apiClient("GET", "/user/29/apikey")
+      .then(apikeys => {
+        this.setState(
+          produce(draft => {
+            draft.apiKeys = apikeys;
+          })
+        );
       })
-    );
+      .catch(err => {
+        console.log("dashboard err", err);
+        err.text().then(errorMsg => {
+          this.setState(
+            produce(draft => {
+              draft.logoutError = errorMsg;
+            })
+          );
+        });
+      });
   }
 
   onLogout = () => {
@@ -42,7 +54,7 @@ export default class Dashboard extends React.Component {
       });
   };
 
-  copyApiKey = (apiKey) => {
+  copyApiKey = apiKey => {
     const textArea = document.createElement("textarea");
     textArea.value = apiKey;
 
@@ -54,39 +66,41 @@ export default class Dashboard extends React.Component {
     document.body.removeChild(textArea);
   };
 
-  deleteApiKey = (apiKeyId) => {
-    console.log('DELETE req: ', apiKeyId);
+  deleteApiKey = apiKeyId => {
+    console.log("DELETE req: ", apiKeyId);
   };
 
   renderApiKeys = () => {
-    const {apiKeys} = this.state;
+    const { apiKeys } = this.state;
 
-    return apiKeys.filter((apiKey) => {
-      return !apiKey.deleted_at
-    }).map((apiKey, idx) => {
-      return (
-        <div className="api-key-item" key={idx}>
-          <div className="api-key">
-            <div>
-              <b>API Key: </b>
-              {apiKey.api_key}
+    return apiKeys
+      .filter(apiKey => {
+        return !apiKey.deleted_at;
+      })
+      .map((apiKey, idx) => {
+        return (
+          <div className="api-key-item" key={idx}>
+            <div className="api-key">
+              <div>
+                <b>API Key: </b>
+                {apiKey.api_key}
+              </div>
+              <div className="created-at">
+                <i>Created: </i>
+                {apiKey.created_at}
+              </div>
             </div>
-            <div className="created-at">
-              <i>Created: </i>
-              {apiKey.created_at}
+            <div className="api-key-actions">
+              <a onClick={() => this.copyApiKey(apiKey.api_key)}>
+                <i className="api-icon fas fa-copy" />
+              </a>
+              <a onClick={() => this.deleteApiKey(apiKey.id)}>
+                <i className="api-icon fas fa-trash-alt" />
+              </a>
             </div>
           </div>
-          <div className="api-key-actions">
-            <a onClick={() => this.copyApiKey(apiKey.api_key)}>
-              <i className="api-icon fas fa-copy" />
-            </a>
-            <a onClick={() => this.deleteApiKey(apiKey.id)}>
-              <i className="api-icon fas fa-trash-alt" />
-            </a>
-          </div>
-        </div>
-      );
-    });
+        );
+      });
   };
 
   // TODO: add logout error handling
@@ -111,9 +125,7 @@ export default class Dashboard extends React.Component {
         </div>
 
         <div className="dashboard-body">
-          <div className="api-key-list">
-            {apiKeyEls}
-          </div>
+          <div className="api-key-list">{apiKeyEls}</div>
         </div>
       </div>
     );

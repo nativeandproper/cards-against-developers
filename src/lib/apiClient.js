@@ -1,19 +1,24 @@
 import env from "../config/development";
 
 const defaultHeaders = {
-  // Accept: "application/json",
   "Content-Type": "application/json"
 };
 
-export default function api(method, url, data, opts = null) {
+export default function api(method, url, data, opts = {}) {
+  const token = localStorage.getItem("cah-token");
+
+  if (token) {
+    defaultHeaders.Authorization = token;
+  }
+
   return fetch(`${env.API_ROOT}${url}`, {
     body: JSON.stringify(data),
-    // TODO: use session token auth for user requests and api token for api requests
+    // TODO: include session token for api token for requests
     credentials: "include",
     headers: defaultHeaders,
     method: method.toUpperCase()
   }).then(res => {
-    // return full response
+    // return response so headers can be accessed
     if (opts.fullRes && res.ok) {
       return res;
     }
