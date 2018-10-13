@@ -1,0 +1,13 @@
+.loading-gif {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .loading-gif-gif {
+    background-image: url("../assets/gifs/loading.gif");
+    background-size: cover;
+    margin-bottom: 20px;
+    width: 200px;
+    height: 100px;
+  }
+}
