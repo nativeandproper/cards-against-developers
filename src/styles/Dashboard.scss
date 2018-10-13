@@ -22,7 +22,6 @@
       display: flex;
       align-items: center;
       position: relative;
-      right: 30px;
 
       a {
         padding: 0px 10px;
@@ -44,6 +43,12 @@
     width: 80%;
     padding: 60px 0px;
 
+    .dashboard-errors {
+      display: flex;
+      justify-content: flex-start;
+      color: red;
+    }
+
     .dashboard-controls {
       display: flex;
       justify-content: flex-end;
@@ -51,7 +56,9 @@
 
     .api-key-list {
       display: flex;
+      flex-direction: column;
       justify-content: center;
+      width: 95%;
       margin: 20px 0px;
       font-size: 20px;
       

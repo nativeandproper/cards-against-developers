@@ -25,7 +25,8 @@ export default class Dashboard extends React.Component {
       userId: null,
       apiKeys: [],
       isLoading: true,
-      logoutError: ""
+      logoutError: "",
+      createApiKeyError: ""
     };
   }
 
@@ -106,14 +107,65 @@ export default class Dashboard extends React.Component {
   };
 
   createApiKey = () => {
-    // TODO: create api key request
-    console.log("CREATE req");
+    this.setState(
+      produce(draft => {
+        draft.isLoading = true;
+      })
+    );
+
+    apiClient("POST", `/user/${this.state.userId}/apikey`)
+      .then(newApiKey => {
+        this.setState(
+          produce(draft => {
+            draft.apiKeys.push(newApiKey);
+            draft.isLoading = false;
+            draft.createApiKeyError = "";
+          })
+        );
+      })
+      .catch(err => {
+        err.text().then(errorMsg => {
+          this.setState(
+            produce(draft => {
+              draft.isLoading = false;
+              draft.createApiKeyError = errorMsg;
+            })
+          );
+        });
+      });
   };
 
   deleteApiKey = apiKeyId => {
     // TODO: delete request
     console.log("DELETE req: ", apiKeyId);
   };
+
+  renderErrors = () => {
+    const errors = [];
+    let errCount = 0;
+
+    if (this.state.createApiKeyError) {
+      errors.push(
+        <div key={`error-${++errCount}`}>
+          {this.state.createApiKeyError}
+        </div>
+      );
+    }
+
+    if (this.state.logoutError) {
+      errors.push(
+        <div key={`error-${++errCount}`}>
+          {this.state.logoutError}
+        </div>
+      );
+    }
+
+    return errors.length > 0 ? (
+      <div className="dashboard-errors">
+        {errors}
+      </div>
+    ) : null;
+  }
 
   renderDashboardBody = () => {
     if (this.state.isLoading) {
@@ -123,12 +175,14 @@ export default class Dashboard extends React.Component {
         </div>
       );
     } else {
+      const dashboardErrorsEl = this.renderErrors();
       const activeApiKeys = this.state.apiKeys.filter(apiKey => {
         return !apiKey.deleted_at;
       });
 
       return (
         <div className="dashboard-body">
+          {dashboardErrorsEl}
           <div className="dashboard-controls">
             <ControlButton
               text={`create api key`}
