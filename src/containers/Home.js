@@ -4,6 +4,7 @@ import React from "react";
 import ButtonLink from "../components/ButtonLink";
 
 // Styles
+import "../styles/Buttons.css";
 import "../styles/Home.css";
 
 export default class Home extends React.Component {

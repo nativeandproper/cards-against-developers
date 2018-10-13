@@ -7,10 +7,11 @@ import { jwtDecode } from "../lib/localStorage";
 
 // Components
 import ApiKeyList from "../components/ApiKeyList";
+import ControlButton from "../components/ControlButton";
 
 // Styles
 import "../styles/Dashboard.css";
-import "../styles/ButtonLink.css";
+import "../styles/Buttons.css";
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -103,6 +104,11 @@ export default class Dashboard extends React.Component {
     document.body.removeChild(textArea);
   };
 
+  createApiKey = () => {
+    // TODO: create api key request
+    console.log("CREATE req");
+  };
+
   deleteApiKey = apiKeyId => {
     // TODO: delete request
     console.log("DELETE req: ", apiKeyId);
@@ -132,6 +138,13 @@ export default class Dashboard extends React.Component {
         </div>
 
         <div className="dashboard-body">
+          <div className="dashboard-controls">
+            <ControlButton
+              text={`create api key`}
+              iconClasses={`fas fa-plus-circle`}
+              clickAction={this.createApiKey}
+            />
+          </div>
           <ApiKeyList
             apiKeys={activeApiKeys}
             isLoading={this.state.isLoading}

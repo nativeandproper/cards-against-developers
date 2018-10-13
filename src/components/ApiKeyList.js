@@ -9,7 +9,7 @@ const ApiKeyList = props => {
   if (props.isLoading) {
     return (
       <div className="api-key-list">
-        <LoadingGif text={`loading...`} />
+        <LoadingGif text={`fetching your api keys...`} />
       </div>
     );
   }

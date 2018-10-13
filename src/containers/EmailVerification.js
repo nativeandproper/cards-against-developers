@@ -2,8 +2,11 @@ import React from "react";
 import apiClient from "../lib/apiClient";
 import produce from "immer";
 
+// Components
 import ButtonLink from "../components/ButtonLink";
 
+// Styles
+import "../styles/Buttons.css";
 import "../styles/EmailVerification.css";
 
 export default class EmailVerification extends React.Component {

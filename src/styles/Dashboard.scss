@@ -41,9 +41,19 @@
     width: 80%;
     padding: 60px 0px;
 
+    .dashboard-controls {
+      display: flex;
+      justify-content: flex-end;
+
+      .create-api-key-btn {
+
+      }
+    }
+
     .api-key-list {
       display: flex;
       justify-content: center;
+      margin: 20px 0px;
 
       .api-key-item {
         display: flex;
