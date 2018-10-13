@@ -138,7 +138,7 @@ export default class Dashboard extends React.Component {
 
   deleteApiKey = apiKeyId => {
     const confirmDelete = window.confirm("Are you sure you want to delete this key?");
-    
+
     if (confirmDelete) {
       this.setState(
         produce(draft => {
