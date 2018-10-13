@@ -1,7 +1,9 @@
 import React from "react";
 import produce from "immer";
+import * as R from "ramda";
 
 import apiClient from "../lib/apiClient";
+import { jwtDecode } from "../lib/localStorage";
 
 // Styles
 import "../styles/Dashboard.css";
@@ -12,30 +14,56 @@ export default class Dashboard extends React.Component {
     super(props);
 
     this.state = {
+      firstName: "",
+      lastName: "",
+      email: "",
+      userId: null,
       apiKeys: [],
       logoutError: ""
     };
   }
 
   componentDidMount() {
-    apiClient("GET", "/user/29/apikey")
-      .then(apikeys => {
-        this.setState(
-          produce(draft => {
-            draft.apiKeys = apikeys;
+    const authToken = localStorage.getItem("cah-token");
+
+    if (!authToken) {
+      // TODO: check if token exists and handle
+    }
+
+    const decoded = jwtDecode(authToken);
+
+    this.setState(
+      produce(draft => {
+        draft.firstName = decoded.payload.first_name;
+        draft.lastName = decoded.payload.last_name;
+        draft.email = decoded.payload.email;
+        draft.userId = decoded.payload.id;
+      }),
+      () => {
+        apiClient("GET", `/user/${decoded.payload.id}/apikey`)
+          .then(apikeys => {
+            // TODO: null -> [], remove check below
+            this.setState(
+              produce(draft => {
+                if (R.isNil(apikeys)) {
+                  draft.apiKeys = [];
+                } else {
+                  draft.apiKeys = apikeys;
+                }
+              })
+            );
           })
-        );
-      })
-      .catch(err => {
-        console.log("dashboard err", err);
-        err.text().then(errorMsg => {
-          this.setState(
-            produce(draft => {
-              draft.logoutError = errorMsg;
-            })
-          );
-        });
-      });
+          .catch(err => {
+            err.text().then(errorMsg => {
+              this.setState(
+                produce(draft => {
+                  draft.logoutError = errorMsg;
+                })
+              );
+            });
+          });
+      }
+    );
   }
 
   onLogout = () => {
@@ -68,11 +96,18 @@ export default class Dashboard extends React.Component {
   };
 
   deleteApiKey = apiKeyId => {
+    // TODO: delete request
     console.log("DELETE req: ", apiKeyId);
   };
 
   renderApiKeys = () => {
     const { apiKeys } = this.state;
+
+    if (R.isEmpty(apiKeys)) {
+      return (
+        <div>no keys</div>
+      );
+    }
 
     return apiKeys
       .filter(apiKey => {
