@@ -26,7 +26,8 @@ export default class Dashboard extends React.Component {
       apiKeys: [],
       isLoading: true,
       logoutError: "",
-      createApiKeyError: ""
+      createApiKeyError: "",
+      deleteApiKeyError: ""
     };
   }
 
@@ -136,8 +137,35 @@ export default class Dashboard extends React.Component {
   };
 
   deleteApiKey = apiKeyId => {
-    // TODO: delete request
-    console.log("DELETE req: ", apiKeyId);
+    const confirmDelete = window.confirm("Are you sure you want to delete this key?");
+    
+    if (confirmDelete) {
+      this.setState(
+        produce(draft => {
+          draft.isLoading = true;
+        })
+      );
+
+      apiClient("DELETE", `/user/${this.state.userId}/apikey/${apiKeyId}`)
+        .then(res => {
+          console.log("RES FROM DELETE: ", res);
+          this.setState(
+            produce(draft => {
+              draft.isLoading = false;
+              draft.deleteApiKeyError = "";
+            })
+          );
+        })
+        .catch(err => {
+          err.text().then(errorMsg => {
+            this.setState(
+              produce(draft => {
+                draft.deleteApiKeyError = errorMsg;
+              })
+            );
+          })
+        });
+    }
   };
 
   renderErrors = () => {
@@ -148,6 +176,14 @@ export default class Dashboard extends React.Component {
       errors.push(
         <div key={`error-${++errCount}`}>
           {this.state.createApiKeyError}
+        </div>
+      );
+    }
+
+    if (this.state.deleteApiKeyError) {
+      errors.push(
+        <div key={`error-${++errCount}`}>
+          {this.state.deleteApiKeyError}
         </div>
       );
     }
