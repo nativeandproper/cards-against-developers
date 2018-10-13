@@ -58,7 +58,7 @@ export default class Login extends React.Component {
 
         localStorage.setItem("cah-token", authHeader);
 
-        this.props.history.push("/dashboard", {
+        this.props.history.push("/dashboard/api-keys", {
           firstName: this.state.firstName
         });
       })

@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import produce from "immer";
 import * as R from "ramda";
 
@@ -6,9 +7,9 @@ import apiClient from "../lib/apiClient";
 import { jwtDecode } from "../lib/localStorage";
 
 // Components
-import ApiKeyList from "../components/ApiKeyList";
-import ControlButton from "../components/ControlButton";
-import LoadingGif from "../components/LoadingGif";
+import DashboardApiKeys from "./DashboardApiKeys";
+import DashboardStats from "./DashboardStats";
+import DashboardSettings from "./DashboardSettings";
 
 // Styles
 import "../styles/Dashboard.css";
@@ -168,97 +169,52 @@ export default class Dashboard extends React.Component {
     }
   };
 
-  renderErrors = () => {
-    const errors = [];
-    let errCount = 0;
-
-    if (this.state.createApiKeyError) {
-      errors.push(
-        <div key={`error-${++errCount}`}>
-          {this.state.createApiKeyError}
-        </div>
-      );
-    }
-
-    if (this.state.deleteApiKeyError) {
-      errors.push(
-        <div key={`error-${++errCount}`}>
-          {this.state.deleteApiKeyError}
-        </div>
-      );
-    }
-
-    if (this.state.logoutError) {
-      errors.push(
-        <div key={`error-${++errCount}`}>
-          {this.state.logoutError}
-        </div>
-      );
-    }
-
-    return errors.length > 0 ? (
-      <div className="dashboard-errors">
-        {errors}
-      </div>
-    ) : null;
-  }
-
-  renderDashboardBody = () => {
-    if (this.state.isLoading) {
-      return (
-        <div className="dashboard-body">
-          <LoadingGif text={`loading...`} />
-        </div>
-      );
-    } else {
-      const dashboardErrorsEl = this.renderErrors();
-      const activeApiKeys = this.state.apiKeys.filter(apiKey => {
-        return !apiKey.deleted_at;
-      });
-
-      return (
-        <div className="dashboard-body">
-          {dashboardErrorsEl}
-          <div className="dashboard-controls">
-            <ControlButton
-              text={`create api key`}
-              iconClasses={`fas fa-plus-circle`}
-              clickAction={this.createApiKey}
-            />
-          </div>
-          <ApiKeyList
-            apiKeys={activeApiKeys}
-            copyApiKey={this.copyApiKey}
-            deleteApiKey={this.deleteApiKey}
-          />
-        </div>
-      );
-    }
-  };
-
   // TODO: add logout error handling
   render() {
-    const dashboardBodyEl = this.renderDashboardBody();
-
     return (
-      <div className="dashboard">
-        <div className="dashboard-nav">
-          <a className="nav-button" onClick={this.onLogout}>
-            log out
-          </a>
-        </div>
-
-        <div className="dashboard-header">
-          <h1>Developer Portal</h1>
-          <div className="dashboard-secondary-nav">
-            <a href="">api keys</a>
-            <a href="">stats</a>
-            <a href="">settings</a>
+      <Router>
+        <div className="dashboard">
+          <div className="dashboard-nav">
+            <a className="nav-button" onClick={this.onLogout}>
+              log out
+            </a>
           </div>
-        </div>
 
-        {dashboardBodyEl}
-      </div>
+          <div className="dashboard-header">
+            <h1>Developer Portal</h1>
+            <div className="dashboard-secondary-nav">
+              <Link to="/dashboard/api-keys">api keys</Link>
+              <Link to="/dashboard/stats">stats</Link>
+              <Link to="/dashboard/settings">settings</Link>
+            </div>
+          </div>
+
+          <Route
+            path="/dashboard/api-keys"
+            render={props => (
+              <DashboardApiKeys
+                {...props}
+                createApiKeyError={this.state.createApiKeyError}
+                deleteApiKeyError={this.state.deleteApiKeyError}
+                logoutError={this.state.logoutError}
+                isLoading={this.state.isLoading}
+                apiKeys={this.state.apiKeys}
+                copyApiKey={this.copyApiKey}
+                createApiKey={this.createApiKey}
+                deleteApiKey={this.deleteApiKey}
+              />
+            )}
+          />
+          <Route
+            path="/dashboard/stats"
+            component={DashboardStats}
+          />
+          <Route
+            path="/dashboard/settings"
+            component={DashboardSettings}
+          />
+        </div>
+      </Router>
     );
   }
 }
