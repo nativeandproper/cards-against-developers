@@ -3,17 +3,8 @@ import * as R from "ramda";
 
 // Components
 import ApiKeyListItem from "./ApiKeyListItem";
-import LoadingGif from "../components/LoadingGif";
 
 const ApiKeyList = props => {
-  if (props.isLoading) {
-    return (
-      <div className="api-key-list">
-        <LoadingGif text={`fetching your api keys...`} />
-      </div>
-    );
-  }
-
   if (!R.isEmpty(props.apiKeys)) {
     const apiKeyListItems = props.apiKeys.map((apiKey, idx) => (
       <ApiKeyListItem
@@ -34,7 +25,7 @@ const ApiKeyList = props => {
 
   return (
     <div className="api-key-list">
-      no api keys
+      {`Looks like you don't have any API Keys yet. Start by creating one above!`}
     </div>
   );
 };

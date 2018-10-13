@@ -3,7 +3,7 @@ import React from "react";
 const ApiKeyListItem = props => (
   <div className="api-key-item">
     <div className="api-key">
-      <div>
+      <div className="key">
         <b>API Key: </b>
         {props.apiKey}
       </div>

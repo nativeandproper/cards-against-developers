@@ -38,23 +38,23 @@
   }
 
   .dashboard-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 80%;
     padding: 60px 0px;
 
     .dashboard-controls {
       display: flex;
       justify-content: flex-end;
-
-      .create-api-key-btn {
-
-      }
     }
 
     .api-key-list {
       display: flex;
       justify-content: center;
       margin: 20px 0px;
-
+      font-size: 20px;
+      
       .api-key-item {
         display: flex;
         justify-content: space-between;
@@ -66,7 +66,12 @@
         background-color: #F2F2F2;
         text-align: left;
 
+        .key, .created-at {
+          font-size: 18px;
+        }
+
         .api-icon {
+          font-size: 20px;
           padding: 10px;
         }
       }

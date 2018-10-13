@@ -8,6 +8,7 @@ import { jwtDecode } from "../lib/localStorage";
 // Components
 import ApiKeyList from "../components/ApiKeyList";
 import ControlButton from "../components/ControlButton";
+import LoadingGif from "../components/LoadingGif";
 
 // Styles
 import "../styles/Dashboard.css";
@@ -114,11 +115,40 @@ export default class Dashboard extends React.Component {
     console.log("DELETE req: ", apiKeyId);
   };
 
+  renderDashboardBody = () => {
+    if (this.state.isLoading) {
+      return (
+        <div className="dashboard-body">
+          <LoadingGif text={`loading...`} />
+        </div>
+      );
+    } else {
+      const activeApiKeys = this.state.apiKeys.filter(apiKey => {
+        return !apiKey.deleted_at;
+      });
+
+      return (
+        <div className="dashboard-body">
+          <div className="dashboard-controls">
+            <ControlButton
+              text={`create api key`}
+              iconClasses={`fas fa-plus-circle`}
+              clickAction={this.createApiKey}
+            />
+          </div>
+          <ApiKeyList
+            apiKeys={activeApiKeys}
+            copyApiKey={this.copyApiKey}
+            deleteApiKey={this.deleteApiKey}
+          />
+        </div>
+      );
+    }
+  };
+
   // TODO: add logout error handling
   render() {
-    const activeApiKeys = this.state.apiKeys.filter(apiKey => {
-      return !apiKey.deleted_at;
-    });
+    const dashboardBodyEl = this.renderDashboardBody();
 
     return (
       <div className="dashboard">
@@ -137,21 +167,7 @@ export default class Dashboard extends React.Component {
           </div>
         </div>
 
-        <div className="dashboard-body">
-          <div className="dashboard-controls">
-            <ControlButton
-              text={`create api key`}
-              iconClasses={`fas fa-plus-circle`}
-              clickAction={this.createApiKey}
-            />
-          </div>
-          <ApiKeyList
-            apiKeys={activeApiKeys}
-            isLoading={this.state.isLoading}
-            copyApiKey={this.copyApiKey}
-            deleteApiKey={this.deleteApiKey}
-          />
-        </div>
+        {dashboardBodyEl}
       </div>
     );
   }
