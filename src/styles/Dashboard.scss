@@ -42,9 +42,13 @@
     padding: 60px 0px;
 
     .api-key-list {
+      display: flex;
+      justify-content: center;
+
       .api-key-item {
         display: flex;
         justify-content: space-between;
+        width: 100%;
         padding: 20px;
         margin: 20px 0px;
         border: 1px grey solid;

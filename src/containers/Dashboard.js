@@ -5,6 +5,9 @@ import * as R from "ramda";
 import apiClient from "../lib/apiClient";
 import { jwtDecode } from "../lib/localStorage";
 
+// Components
+import ApiKeyList from "../components/ApiKeyList";
+
 // Styles
 import "../styles/Dashboard.css";
 import "../styles/ButtonLink.css";
@@ -19,6 +22,7 @@ export default class Dashboard extends React.Component {
       email: "",
       userId: null,
       apiKeys: [],
+      isLoading: true,
       logoutError: ""
     };
   }
@@ -45,6 +49,8 @@ export default class Dashboard extends React.Component {
             // TODO: null -> [], remove check below
             this.setState(
               produce(draft => {
+                draft.isLoading = false;
+
                 if (R.isNil(apikeys)) {
                   draft.apiKeys = [];
                 } else {
@@ -57,6 +63,7 @@ export default class Dashboard extends React.Component {
             err.text().then(errorMsg => {
               this.setState(
                 produce(draft => {
+                  draft.isLoading = false;
                   draft.logoutError = errorMsg;
                 })
               );
@@ -76,6 +83,7 @@ export default class Dashboard extends React.Component {
         err.text().then(errorMsg => {
           this.setState(
             produce(draft => {
+              draft.isLoading = false;
               draft.logoutError = errorMsg;
             })
           );
@@ -100,48 +108,11 @@ export default class Dashboard extends React.Component {
     console.log("DELETE req: ", apiKeyId);
   };
 
-  renderApiKeys = () => {
-    const { apiKeys } = this.state;
-
-    if (R.isEmpty(apiKeys)) {
-      return (
-        <div>no keys</div>
-      );
-    }
-
-    return apiKeys
-      .filter(apiKey => {
-        return !apiKey.deleted_at;
-      })
-      .map((apiKey, idx) => {
-        return (
-          <div className="api-key-item" key={idx}>
-            <div className="api-key">
-              <div>
-                <b>API Key: </b>
-                {apiKey.api_key}
-              </div>
-              <div className="created-at">
-                <i>Created: </i>
-                {apiKey.created_at}
-              </div>
-            </div>
-            <div className="api-key-actions">
-              <a onClick={() => this.copyApiKey(apiKey.api_key)}>
-                <i className="api-icon fas fa-copy" />
-              </a>
-              <a onClick={() => this.deleteApiKey(apiKey.id)}>
-                <i className="api-icon fas fa-trash-alt" />
-              </a>
-            </div>
-          </div>
-        );
-      });
-  };
-
   // TODO: add logout error handling
   render() {
-    const apiKeyEls = this.renderApiKeys();
+    const activeApiKeys = this.state.apiKeys.filter(apiKey => {
+      return !apiKey.deleted_at;
+    });
 
     return (
       <div className="dashboard">
@@ -161,7 +132,12 @@ export default class Dashboard extends React.Component {
         </div>
 
         <div className="dashboard-body">
-          <div className="api-key-list">{apiKeyEls}</div>
+          <ApiKeyList
+            apiKeys={activeApiKeys}
+            isLoading={this.state.isLoading}
+            copyApiKey={this.copyApiKey}
+            deleteApiKey={this.deleteApiKey}
+          />
         </div>
       </div>
     );
