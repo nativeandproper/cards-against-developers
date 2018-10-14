@@ -149,11 +149,11 @@ export default class Dashboard extends React.Component {
 
       apiClient("DELETE", `/user/${this.state.userId}/apikey/${apiKeyId}`)
         .then(res => {
-          console.log("RES FROM DELETE: ", res);
           this.setState(
             produce(draft => {
               draft.isLoading = false;
               draft.deleteApiKeyError = "";
+              draft.apiKeys = this.state.apiKeys.filter((apiKey) => apiKey.id !== apiKeyId);
             })
           );
         })
