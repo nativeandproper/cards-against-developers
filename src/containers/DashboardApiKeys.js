@@ -15,15 +15,11 @@ export default class DashboardApiKeys extends React.Component {
   }
 
   renderErrors = () => {
-    const errorEls = this.props.errors.map((error, idx) => (
-      <div key={`error-${idx + 1}`}>
-        {error.msg}
-      </div>
-    ));
-
-    return errorEls.length > 0 ? (
+    return this.props.error ? (
       <div className="dashboard-errors">
-        {errorEls}
+        <div>
+          {this.props.error}
+        </div>
       </div>
     ) : null;
   };

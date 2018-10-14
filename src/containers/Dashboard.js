@@ -26,7 +26,7 @@ export default class Dashboard extends React.Component {
       userId: null,
       apiKeys: [],
       isLoading: true,
-      errors: []
+      error: ""
     };
   }
 
@@ -48,7 +48,7 @@ export default class Dashboard extends React.Component {
     if (decoded === null) {
       this.setState(
         produce(draft => {
-          draft.errors.push({type: "jwt-decode", msg: "Error fetching your information. Please refresh the page."});
+          draft.error = "Error fetching your information. Please refresh the page.";
         })
       );
     }
@@ -67,7 +67,7 @@ export default class Dashboard extends React.Component {
             this.setState(
               produce(draft => {
                 draft.isLoading = false;
-                draft.errors = this.state.errors.filter(error => error.type !== "get-api-key");
+                draft.error = "";
 
                 if (R.isNil(apikeys)) {
                   draft.apiKeys = [];
@@ -82,7 +82,7 @@ export default class Dashboard extends React.Component {
               this.setState(
                 produce(draft => {
                   draft.isLoading = false;
-                  draft.errors.push({type: "get-api-key", msg: errorMsg});
+                  draft.error = errorMsg;
                 })
               );
             });
@@ -102,7 +102,7 @@ export default class Dashboard extends React.Component {
           this.setState(
             produce(draft => {
               draft.isLoading = false;
-              draft.errors.push({type: "logout", msg: errorMsg});
+              draft.error = errorMsg;
             })
           );
         });
@@ -134,7 +134,7 @@ export default class Dashboard extends React.Component {
           produce(draft => {
             draft.apiKeys.push(newApiKey);
             draft.isLoading = false;
-            draft.errors = this.state.errors.filter(error => error.type !== "create-api-key");
+            draft.error = "";
           })
         );
       })
@@ -143,7 +143,7 @@ export default class Dashboard extends React.Component {
           this.setState(
             produce(draft => {
               draft.isLoading = false;
-              draft.errors.push({type: "create-api-key", msg: errorMsg});
+              draft.error = errorMsg;
             })
           );
         });
@@ -166,7 +166,7 @@ export default class Dashboard extends React.Component {
             produce(draft => {
               draft.apiKeys = this.state.apiKeys.filter((apiKey) => apiKey.id !== apiKeyId);
               draft.isLoading = false;
-              draft.errors = this.state.errors.filter(error => error.type !== "delete-api-key");
+              draft.error = "";
             })
           );
         })
@@ -175,7 +175,7 @@ export default class Dashboard extends React.Component {
             this.setState(
               produce(draft => {
                 draft.isLoading = false;
-                draft.errors.push({type: "delete-api-key", msg: errorMsg})
+                draft.error = errorMsg;
               })
             );
           })
@@ -183,7 +183,6 @@ export default class Dashboard extends React.Component {
     }
   };
 
-  // TODO: add logout error handling
   render() {
     return (
       <Router>
@@ -212,7 +211,7 @@ export default class Dashboard extends React.Component {
                 copyApiKey={this.copyApiKey}
                 createApiKey={this.createApiKey}
                 deleteApiKey={this.deleteApiKey}
-                errors={this.state.errors}
+                error={this.state.error}
                 isLoading={this.state.isLoading}
               />
             )}
