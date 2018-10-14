@@ -31,12 +31,6 @@ export default class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    this.setState(
-      produce(draft => {
-        draft.isLoading = true;
-      })
-    );
-
     const authToken = localStorage.getItem("cah-token");
 
     if (!authToken) {
@@ -48,7 +42,7 @@ export default class Dashboard extends React.Component {
     if (decoded === null) {
       this.setState(
         produce(draft => {
-          draft.error = "Error fetching your information. Please refresh the page.";
+          draft.error = "Error fetching your information. Please log out and log in again.";
         })
       );
     }

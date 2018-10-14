@@ -14,7 +14,7 @@ export default class DashboardApiKeys extends React.Component {
     this.state = {};
   }
 
-  renderErrors = () => {
+  renderError = () => {
     return this.props.error ? (
       <div className="dashboard-errors">
         <div>
@@ -33,12 +33,12 @@ export default class DashboardApiKeys extends React.Component {
       );
     }
 
-    const dashboardErrorsEl = this.renderErrors();
+    const dashboardErrorEl = this.renderError();
     const activeApiKeys = this.props.apiKeys.filter(apiKey => !apiKey.deleted_at);
 
     return (
       <div className="dashboard-body">
-        {dashboardErrorsEl}
+        {dashboardErrorEl}
         <div className="dashboard-controls">
           <ControlButton
             text={`create api key`}
