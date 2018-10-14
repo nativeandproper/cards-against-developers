@@ -18,8 +18,8 @@ export default function api(method, url, data, opts = {}) {
     headers: defaultHeaders,
     method: method.toUpperCase()
   }).then(res => {
-    // return response so headers can be accessed
-    if (opts.fullRes && res.ok) {
+    // return raw response
+    if (opts.rawRes && res.ok) {
       return res;
     }
 

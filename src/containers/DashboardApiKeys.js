@@ -15,36 +15,15 @@ export default class DashboardApiKeys extends React.Component {
   }
 
   renderErrors = () => {
-    const errors = [];
-    let errCount = 0;
+    const errorEls = this.props.errors.map((error, idx) => (
+      <div key={`error-${idx + 1}`}>
+        {error.msg}
+      </div>
+    ));
 
-    if (this.props.createApiKeyError) {
-      errors.push(
-        <div key={`error-${++errCount}`}>
-          {this.props.createApiKeyError}
-        </div>
-      );
-    }
-
-    if (this.props.deleteApiKeyError) {
-      errors.push(
-        <div key={`error-${++errCount}`}>
-          {this.props.deleteApiKeyError}
-        </div>
-      );
-    }
-
-    if (this.props.logoutError) {
-      errors.push(
-        <div key={`error-${++errCount}`}>
-          {this.props.logoutError}
-        </div>
-      );
-    }
-
-    return errors.length > 0 ? (
+    return errorEls.length > 0 ? (
       <div className="dashboard-errors">
-        {errors}
+        {errorEls}
       </div>
     ) : null;
   };
@@ -56,29 +35,27 @@ export default class DashboardApiKeys extends React.Component {
           <LoadingGif text={`loading...`} />
         </div>
       );
-    } else {
-      const dashboardErrorsEl = this.renderErrors();
-      const activeApiKeys = this.props.apiKeys.filter(apiKey => {
-        return !apiKey.deleted_at;
-      });
+    }
 
-      return (
-        <div className="dashboard-body">
-          {dashboardErrorsEl}
-          <div className="dashboard-controls">
-            <ControlButton
-              text={`create api key`}
-              iconClasses={`fas fa-plus-circle`}
-              clickAction={this.props.createApiKey}
-            />
-          </div>
-          <ApiKeyList
-            apiKeys={activeApiKeys}
-            copyApiKey={this.props.copyApiKey}
-            deleteApiKey={this.props.deleteApiKey}
+    const dashboardErrorsEl = this.renderErrors();
+    const activeApiKeys = this.props.apiKeys.filter(apiKey => !apiKey.deleted_at);
+
+    return (
+      <div className="dashboard-body">
+        {dashboardErrorsEl}
+        <div className="dashboard-controls">
+          <ControlButton
+            text={`create api key`}
+            iconClasses={`fas fa-plus-circle`}
+            clickAction={this.props.createApiKey}
           />
         </div>
-      );
-    }
+        <ApiKeyList
+          apiKeys={activeApiKeys}
+          copyApiKey={this.props.copyApiKey}
+          deleteApiKey={this.props.deleteApiKey}
+        />
+      </div>
+    );
   }
 }

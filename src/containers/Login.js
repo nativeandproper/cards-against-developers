@@ -45,7 +45,7 @@ export default class Login extends React.Component {
       return;
     }
 
-    apiClient("POST", "/login", request, { fullRes: true })
+    apiClient("POST", "/login", request, { rawRes: true })
       .then(res => {
         const authHeader = res.headers.get("Authorization");
         if (!authHeader) {
@@ -63,7 +63,6 @@ export default class Login extends React.Component {
         });
       })
       .catch(err => {
-        console.log("login err:", err);
         err.text().then(errorMsg => {
           this.setState(
             produce(draft => {

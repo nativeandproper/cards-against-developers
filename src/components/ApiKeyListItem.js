@@ -6,8 +6,8 @@ import FAIcon from "./FAIcon";
 const ApiKeyListItem = props => {
   return (
     <div className="api-key-item">
-      <div className="api-key">
-        <div className="key">
+      <div className="api-key-content">
+        <div className="api-key">
           <b>API Key: </b>
           {props.apiKey}
         </div>
@@ -20,11 +20,11 @@ const ApiKeyListItem = props => {
         <FAIcon
           clickAction={props.copyApiKey}
           showFeedback={true}
-          iconClasses={`api-icon fas fa-copy`}
+          iconClasses={`api-key-icon fas fa-copy`}
         />
         <FAIcon
           clickAction={props.deleteApiKey}
-          iconClasses={`api-icon fas fa-trash-alt`}
+          iconClasses={`api-key-icon fas fa-trash-alt`}
         />
       </div>
     </div>

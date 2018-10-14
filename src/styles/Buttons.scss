@@ -1,23 +1,21 @@
-.nav-button {
+.common-button {
     font-size: 14px;
+    margin: 0px 4px;
     text-decoration: none;
     color: #2c3e50;
-    margin: 0px 4px;
-    padding: 4px 8px;
-    border: 1px solid #ececec;
+    border: 1px solid #ECECEC;
 }
-  
-.nav-button:hover {
-    opacity: 0.6;
+
+.common-button:hover {
+    opacity: 0.6
+}
+
+.nav-button {
+    padding: 4px 8px;
 }
 
 .control-button {
-    font-size: 14px;
-    text-decoration: none;
-    color: #2c3e50;
-    margin: 0px 4px;
     padding: 2px 14px;
-    border: 1px solid #ececec;
     border-radius: 10px;
 
     i {
@@ -27,8 +25,4 @@
     .control-button-text {
         display: inline;
     }
-}
-
-.control-button:hover {
-    opacity: 0.6;
 }

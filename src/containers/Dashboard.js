@@ -9,7 +9,7 @@ import { jwtDecode } from "../lib/localStorage";
 // Components
 import DashboardApiKeys from "./DashboardApiKeys";
 import DashboardStats from "./DashboardStats";
-import DashboardSettings from "./DashboardSettings";
+import DashboardUserSettings from "./DashboardUserSettings";
 
 // Styles
 import "../styles/Dashboard.css";
@@ -26,13 +26,17 @@ export default class Dashboard extends React.Component {
       userId: null,
       apiKeys: [],
       isLoading: true,
-      logoutError: "",
-      createApiKeyError: "",
-      deleteApiKeyError: ""
+      errors: []
     };
   }
 
   componentDidMount() {
+    this.setState(
+      produce(draft => {
+        draft.isLoading = true;
+      })
+    );
+
     const authToken = localStorage.getItem("cah-token");
 
     if (!authToken) {
@@ -40,6 +44,14 @@ export default class Dashboard extends React.Component {
     }
 
     const decoded = jwtDecode(authToken);
+
+    if (decoded === null) {
+      this.setState(
+        produce(draft => {
+          draft.errors.push({type: "jwt-decode", msg: "Error fetching your information. Please refresh the page."});
+        })
+      );
+    }
 
     this.setState(
       produce(draft => {
@@ -55,6 +67,7 @@ export default class Dashboard extends React.Component {
             this.setState(
               produce(draft => {
                 draft.isLoading = false;
+                draft.errors = this.state.errors.filter(error => error.type !== "get-api-key");
 
                 if (R.isNil(apikeys)) {
                   draft.apiKeys = [];
@@ -69,7 +82,7 @@ export default class Dashboard extends React.Component {
               this.setState(
                 produce(draft => {
                   draft.isLoading = false;
-                  draft.logoutError = errorMsg;
+                  draft.errors.push({type: "get-api-key", msg: errorMsg});
                 })
               );
             });
@@ -89,7 +102,7 @@ export default class Dashboard extends React.Component {
           this.setState(
             produce(draft => {
               draft.isLoading = false;
-              draft.logoutError = errorMsg;
+              draft.errors.push({type: "logout", msg: errorMsg});
             })
           );
         });
@@ -104,7 +117,7 @@ export default class Dashboard extends React.Component {
     textArea.focus();
     textArea.select();
 
-    const success = document.execCommand("copy");
+    document.execCommand("copy");
     document.body.removeChild(textArea);
   };
 
@@ -121,7 +134,7 @@ export default class Dashboard extends React.Component {
           produce(draft => {
             draft.apiKeys.push(newApiKey);
             draft.isLoading = false;
-            draft.createApiKeyError = "";
+            draft.errors = this.state.errors.filter(error => error.type !== "create-api-key");
           })
         );
       })
@@ -130,7 +143,7 @@ export default class Dashboard extends React.Component {
           this.setState(
             produce(draft => {
               draft.isLoading = false;
-              draft.createApiKeyError = errorMsg;
+              draft.errors.push({type: "create-api-key", msg: errorMsg});
             })
           );
         });
@@ -151,9 +164,9 @@ export default class Dashboard extends React.Component {
         .then(res => {
           this.setState(
             produce(draft => {
-              draft.isLoading = false;
-              draft.deleteApiKeyError = "";
               draft.apiKeys = this.state.apiKeys.filter((apiKey) => apiKey.id !== apiKeyId);
+              draft.isLoading = false;
+              draft.errors = this.state.errors.filter(error => error.type !== "delete-api-key");
             })
           );
         })
@@ -161,7 +174,8 @@ export default class Dashboard extends React.Component {
           err.text().then(errorMsg => {
             this.setState(
               produce(draft => {
-                draft.deleteApiKeyError = errorMsg;
+                draft.isLoading = false;
+                draft.errors.push({type: "delete-api-key", msg: errorMsg})
               })
             );
           })
@@ -175,7 +189,7 @@ export default class Dashboard extends React.Component {
       <Router>
         <div className="dashboard">
           <div className="dashboard-nav">
-            <a className="nav-button" onClick={this.onLogout}>
+            <a className="common-button nav-button" onClick={this.onLogout}>
               log out
             </a>
           </div>
@@ -194,14 +208,12 @@ export default class Dashboard extends React.Component {
             render={props => (
               <DashboardApiKeys
                 {...props}
-                createApiKeyError={this.state.createApiKeyError}
-                deleteApiKeyError={this.state.deleteApiKeyError}
-                logoutError={this.state.logoutError}
-                isLoading={this.state.isLoading}
                 apiKeys={this.state.apiKeys}
                 copyApiKey={this.copyApiKey}
                 createApiKey={this.createApiKey}
                 deleteApiKey={this.deleteApiKey}
+                errors={this.state.errors}
+                isLoading={this.state.isLoading}
               />
             )}
           />
@@ -211,7 +223,7 @@ export default class Dashboard extends React.Component {
           />
           <Route
             path="/dashboard/settings"
-            component={DashboardSettings}
+            component={DashboardUserSettings}
           />
         </div>
       </Router>
