@@ -22,7 +22,7 @@ export default class Login extends React.Component {
   handleChange = (key, value) => {
     this.setState(
       produce(draft => {
-        draft[key] = value
+        draft[key] = value;
       })
     );
   };
@@ -37,16 +37,28 @@ export default class Login extends React.Component {
     if (invalidEmail(this.state.email)) {
       this.setState(
         produce(draft => {
-          draft.loginError = "email must be less than 32 characters and contain an '@' sign"
+          draft.loginError =
+            "email must be less than 32 characters and contain an '@' sign";
         })
       );
 
       return;
     }
 
-    apiClient("POST", "/login", request)
+    apiClient("POST", "/login", request, { rawRes: true })
       .then(res => {
-        this.props.history.push("/dashboard", {
+        const authHeader = res.headers.get("Authorization");
+        if (!authHeader) {
+          this.setState(
+            produce(draft => {
+              draft.loginError = "error authentication failed";
+            })
+          );
+        }
+
+        localStorage.setItem("cah-token", authHeader);
+
+        this.props.history.push("/dashboard/api-keys", {
           firstName: this.state.firstName
         });
       })
@@ -54,7 +66,7 @@ export default class Login extends React.Component {
         err.text().then(errorMsg => {
           this.setState(
             produce(draft => {
-              draft.loginError = errorMsg
+              draft.loginError = errorMsg;
             })
           );
         });

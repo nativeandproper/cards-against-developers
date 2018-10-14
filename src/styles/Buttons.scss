@@ -1,0 +1,28 @@
+.common-button {
+    font-size: 14px;
+    margin: 0px 4px;
+    text-decoration: none;
+    color: #2c3e50;
+    border: 1px solid #ECECEC;
+}
+
+.common-button:hover {
+    opacity: 0.6
+}
+
+.nav-button {
+    padding: 4px 8px;
+}
+
+.control-button {
+    padding: 2px 14px;
+    border-radius: 10px;
+
+    i {
+        padding: 10px 10px 10px 0px;
+    }
+
+    .control-button-text {
+        display: inline;
+    }
+}

@@ -2,8 +2,11 @@ import React from "react";
 import apiClient from "../lib/apiClient";
 import produce from "immer";
 
+// Components
 import ButtonLink from "../components/ButtonLink";
 
+// Styles
+import "../styles/Buttons.css";
 import "../styles/EmailVerification.css";
 
 export default class EmailVerification extends React.Component {
@@ -56,7 +59,7 @@ export default class EmailVerification extends React.Component {
           <h1>(glad I can call you that now)</h1>
           <div className="thanks-bud-img cover-img" />
           <p>Your email has been verified.</p>
-          <ButtonLink to="/dashboard" classes="nav-button" name="dashboard" />
+          <ButtonLink to="/dashboard" classes="common-button nav-button" name="dashboard" />
         </div>
       );
     }

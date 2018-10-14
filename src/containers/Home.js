@@ -4,6 +4,7 @@ import React from "react";
 import ButtonLink from "../components/ButtonLink";
 
 // Styles
+import "../styles/Buttons.css";
 import "../styles/Home.css";
 
 export default class Home extends React.Component {
@@ -11,8 +12,8 @@ export default class Home extends React.Component {
     return (
       <div className="home">
         <div className="home-nav">
-          <ButtonLink to="/about" classes="nav-button" name="about" />
-          <a className="nav-button" href="https://www.gitbook.com/">
+          <ButtonLink to="/about" classes="common-button nav-button" name="about" />
+          <a className="common-button nav-button" href="https://www.gitbook.com/">
             docs
           </a>
         </div>
@@ -27,8 +28,8 @@ export default class Home extends React.Component {
             </h2>
           </div>
           <div className="login-signup-buttons">
-            <ButtonLink to="/login" classes="nav-button" name="log in" />
-            <ButtonLink to="/signup" classes="nav-button" name="sign up" />
+            <ButtonLink to="/login" classes="common-button nav-button" name="log in" />
+            <ButtonLink to="/signup" classes="common-button nav-button" name="sign up" />
           </div>
         </div>
         <div className="title">
