@@ -19,6 +19,12 @@ class Login extends React.Component {
     };
   }
 
+  componentWillMount() {
+    if (this.props.isAuthenticated) {
+      this.props.history.push("/dashboard/api-keys");
+    }
+  }
+
   handleChange = (key, value) => {
     this.setState(
       produce(draft => {
@@ -57,7 +63,7 @@ class Login extends React.Component {
         }
 
         localStorage.setItem("cah-token", authHeader);
-        
+
         this.props.setAuth(true);
         this.props.history.push("/dashboard/api-keys", {
           firstName: this.state.firstName
