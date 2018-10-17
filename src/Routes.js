@@ -12,20 +12,20 @@ import SignupRoutes from "./routes/SignupRoutes";
 import NotFound from "./components/NotFound";
 
 const Routes = () => (
-  <BrowserRouter>
-    <div id="app">
-      <AuthProvider>
+  <AuthProvider>
+    <BrowserRouter>
+      <div id="app">
         <Switch>
           <Route exact={true} path="/" component={Home} />
           <Route path="/about" component={About} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignupRoutes} />
-          <Route path="/dashboard" component={Dashboard} />
+          <ProtectedRoute path="/dashboard" component={Dashboard} />
           <Route component={NotFound} />
         </Switch>
-      </AuthProvider>
-    </div>
-  </BrowserRouter>
+      </div>
+    </BrowserRouter>
+  </AuthProvider>
 );
 
 export default Routes;

@@ -5,6 +5,7 @@ import * as R from "ramda";
 
 import apiClient from "../lib/apiClient";
 import { jwtDecode } from "../lib/localStorage";
+import { withAuthContext } from "../lib/contextLib";
 
 // Components
 import DashboardApiKeys from "./DashboardApiKeys";
@@ -15,7 +16,7 @@ import DashboardUserSettings from "./DashboardUserSettings";
 import "../styles/Dashboard.css";
 import "../styles/Buttons.css";
 
-export default class Dashboard extends React.Component {
+class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
@@ -89,7 +90,9 @@ export default class Dashboard extends React.Component {
     apiClient("POST", "/logout")
       .then(res => {
         localStorage.removeItem("cah-token");
-        this.props.history.push("/login", null);
+
+        this.props.setAuth(false);
+        this.props.history.push("/", null);
       })
       .catch(err => {
         err.text().then(errorMsg => {
@@ -223,3 +226,5 @@ export default class Dashboard extends React.Component {
     );
   }
 }
+
+export default withAuthContext(Dashboard);

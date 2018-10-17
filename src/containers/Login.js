@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import produce from "immer";
 
 import apiClient from "../lib/apiClient";
-
+import { withAuthContext } from "../lib/contextLib";
 import { invalidEmail } from "../helpers/stringHelper";
 
 import "../styles/LoginSignup.css";
 
-export default class Login extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
 
@@ -57,7 +57,8 @@ export default class Login extends React.Component {
         }
 
         localStorage.setItem("cah-token", authHeader);
-
+        
+        this.props.setAuth(true);
         this.props.history.push("/dashboard/api-keys", {
           firstName: this.state.firstName
         });
@@ -115,3 +116,5 @@ export default class Login extends React.Component {
     );
   }
 }
+
+export default withAuthContext(Login);

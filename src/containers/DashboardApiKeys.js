@@ -1,5 +1,7 @@
 import React from "react";
 
+import { withAuthContext } from "../lib/contextLib";
+
 // Components
 import ApiKeyList from "../components/ApiKeyList";
 import ControlButton from "../components/ControlButton";
@@ -8,7 +10,7 @@ import LoadingGif from "../components/LoadingGif";
 // Styles
 import "../styles/Buttons.css";
 
-export default class DashboardApiKeys extends React.Component {
+class DashboardApiKeys extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -55,3 +57,5 @@ export default class DashboardApiKeys extends React.Component {
     );
   }
 }
+
+export default withAuthContext(DashboardApiKeys);
