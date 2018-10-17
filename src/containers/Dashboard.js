@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Link, Redirect } from "react-router-dom";
 import produce from "immer";
 import * as R from "ramda";
 
@@ -35,7 +35,11 @@ class Dashboard extends React.Component {
     const authToken = localStorage.getItem("cah-token");
 
     if (!authToken) {
-      // TODO: check if token exists and handle
+      this.setState(
+        produce(draft => {
+          draft.error = "We had a problem fetching your information. Please log out and log in again.";
+        })
+      )
     }
 
     const decoded = jwtDecode(authToken);
@@ -43,7 +47,7 @@ class Dashboard extends React.Component {
     if (decoded === null) {
       this.setState(
         produce(draft => {
-          draft.error = "Error fetching your information. Please log out and log in again.";
+          draft.error = "We had a problem fetching your information. Please log out and log in again.";
         })
       );
     }
@@ -182,9 +186,18 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <Router>
+      <BrowserRouter>
         <div className="dashboard">
           <div className="dashboard-nav">
+            <a href="/" className="common-button nav-button">
+              home
+            </a>
+            <a href="/about" className="common-button nav-button">
+              about
+            </a>
+            <a href="https://www.gitbook.com/" className="common-button nav-button">
+              docs
+            </a>
             <a className="common-button nav-button" onClick={this.onLogout}>
               log out
             </a>
@@ -199,30 +212,33 @@ class Dashboard extends React.Component {
             </div>
           </div>
 
-          <Route
-            path="/dashboard/api-keys"
-            render={props => (
-              <DashboardApiKeys
-                {...props}
-                apiKeys={this.state.apiKeys}
-                copyApiKey={this.copyApiKey}
-                createApiKey={this.createApiKey}
-                deleteApiKey={this.deleteApiKey}
-                error={this.state.error}
-                isLoading={this.state.isLoading}
-              />
-            )}
-          />
-          <Route
-            path="/dashboard/stats"
-            component={DashboardStats}
-          />
-          <Route
-            path="/dashboard/settings"
-            component={DashboardUserSettings}
-          />
+          <Switch>
+            <Route
+              path="/dashboard/api-keys"
+              render={props => (
+                <DashboardApiKeys
+                  {...props}
+                  apiKeys={this.state.apiKeys}
+                  copyApiKey={this.copyApiKey}
+                  createApiKey={this.createApiKey}
+                  deleteApiKey={this.deleteApiKey}
+                  error={this.state.error}
+                  isLoading={this.state.isLoading}
+                />
+              )}
+            />
+            <Route
+              path="/dashboard/stats"
+              component={DashboardStats}
+            />
+            <Route
+              path="/dashboard/settings"
+              component={DashboardUserSettings}
+            />
+            <Redirect from="/dashboard" to="/dashboard/api-keys" />
+          </Switch>
         </div>
-      </Router>
+      </BrowserRouter>
     );
   }
 }
