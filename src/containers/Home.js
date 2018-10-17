@@ -10,15 +10,18 @@ import "../styles/Buttons.css";
 import "../styles/Home.css";
 
 class Home extends React.Component {
+  componentWillMount() {
+    if (this.props.isAuthenticated) {
+      this.props.history.push("/dashboard/api-keys");
+    }
+  }
+  
   render() {
     return (
       <div className="home">
         <div className="home-nav">
-          {this.props.isAuthenticated && (
-            <ButtonLink to="/dashboard/api-keys" name="dashboard" />
-          )}
           <ButtonLink to="/about" name="about" />
-          <a className="common-button nav-button" href="https://www.gitbook.com/">
+          <a href="https://www.gitbook.com/" target="_blank" className="common-button nav-button">
             docs
           </a>
         </div>
