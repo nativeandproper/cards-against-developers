@@ -33,11 +33,12 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     const authToken = localStorage.getItem("cah-token");
+    const tokenError = "We had a problem fetching your information. Please log out and log in again.";
 
     if (!authToken) {
       this.setState(
         produce(draft => {
-          draft.error = "We had a problem fetching your information. Please log out and log in again.";
+          draft.error = tokenError;
         })
       )
     }
@@ -47,7 +48,7 @@ class Dashboard extends React.Component {
     if (decoded === null) {
       this.setState(
         produce(draft => {
-          draft.error = "We had a problem fetching your information. Please log out and log in again.";
+          draft.error = tokenError;
         })
       );
     }
