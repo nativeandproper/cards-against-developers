@@ -6,8 +6,8 @@ import LoadingGif from "../components/LoadingGif";
 import "../styles/LoadingPage.css"
 
 const LoadingPage = () => (
-  <div className="loading-page">
-    <LoadingGif text={`loading...`} />
+  <div id="app" className="loading-page">
+    <LoadingGif gifFileName={"main_loading"} />
   </div>
 );
 
