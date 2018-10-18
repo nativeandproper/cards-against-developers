@@ -1,6 +1,8 @@
 import React from "react";
 import produce from "immer";
 
+import apiClient from "./lib/apiClient";
+
 const AuthContext = React.createContext();
 
 class AuthProvider extends React.Component {
@@ -8,6 +10,7 @@ class AuthProvider extends React.Component {
     super(props);
     
     this.state = {
+      checkingAuthentication: true,
       isAuthenticated: false
     };
   }
@@ -16,9 +19,36 @@ class AuthProvider extends React.Component {
     const authToken = localStorage.getItem("cah-token");
 
     if (authToken) {
+      apiClient("GET", "/auth")
+        .then(res => {
+          if (res.is_authenticated) {
+            this.setState(
+              produce(draft => {
+                draft.checkingAuthentication = false;
+                draft.isAuthenticated = true;
+              })
+            );
+          } else {
+            localStorage.removeItem("cah-token");
+            this.setState(
+              produce(draft => {
+                draft.checkingAuthentication = false;
+              })
+            );
+          }
+        })
+        .catch(_ => {
+          localStorage.removeItem("cah-token");
+          this.setState(
+            produce(draft => {
+              draft.checkingAuthentication = false;
+            })
+          );
+        });
+    } else {
       this.setState(
         produce(draft => {
-          draft.isAuthenticated = true;
+          draft.checkingAuthentication = false;
         })
       );
     }
@@ -35,6 +65,7 @@ class AuthProvider extends React.Component {
   render() {
     return (
       <AuthContext.Provider value={{
+        checkingAuthentication: this.state.checkingAuthentication,
         isAuthenticated: this.state.isAuthenticated,
         setAuth: this.setAuth
       }}>

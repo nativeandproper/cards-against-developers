@@ -5,10 +5,17 @@ import ReactDOM from "react-dom";
 import registerServiceWorker from "./registerServiceWorker";
 
 // Components
+import { AuthProvider } from "./AuthContext";
+import App from "./App";
 import Routes from "./Routes";
 
 // Styles
 import "./index.css";
 
-ReactDOM.render(<Routes />, document.getElementById("root"));
+ReactDOM.render(
+  <AuthProvider>
+    <App />
+  </AuthProvider>,
+  document.getElementById("root")
+);
 registerServiceWorker();

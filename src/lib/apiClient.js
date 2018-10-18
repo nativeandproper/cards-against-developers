@@ -13,7 +13,6 @@ export default function api(method, url, data, opts = {}) {
 
   return fetch(`${env.API_ROOT}${url}`, {
     body: JSON.stringify(data),
-    // TODO: include session token for api token for requests
     credentials: "include",
     headers: defaultHeaders,
     method: method.toUpperCase()
