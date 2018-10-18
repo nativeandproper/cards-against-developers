@@ -7,7 +7,6 @@ import registerServiceWorker from "./registerServiceWorker";
 // Components
 import { AuthProvider } from "./AuthContext";
 import App from "./App";
-import Routes from "./Routes";
 
 // Styles
 import "./index.css";
