@@ -190,7 +190,7 @@ class Dashboard extends React.Component {
       <BrowserRouter>
         <div className="dashboard">
           <div className="dashboard-nav">
-            <a href="https://www.gitbook.com/" target="_blank" rel="noopener noreferrer" className="common-button nav-button">
+            <a href={process.env.REACT_APP_CAH_API_DOCS_URL} target="_blank" rel="noopener noreferrer" className="common-button nav-button">
               docs
             </a>
             <a className="common-button nav-button" onClick={this.onLogout}>

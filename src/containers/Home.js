@@ -21,7 +21,7 @@ class Home extends React.Component {
       <div className="home">
         <div className="home-nav">
           <ButtonLink to="/about" name="about" />
-          <a href="https://www.gitbook.com/" target="_blank" rel="noopener noreferrer" className="common-button nav-button">
+          <a href={process.env.REACT_APP_CAH_API_DOCS_URL} target="_blank" rel="noopener noreferrer" className="common-button nav-button">
             docs
           </a>
         </div>
