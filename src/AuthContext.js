@@ -15,43 +15,45 @@ class AuthProvider extends React.Component {
     };
   }
 
+  removeAuthAndFinishCheck = () => {
+    localStorage.removeItem("cah-token");
+    
+    this.setState(
+      produce(draft => {
+        draft.checkingAuthentication = false;
+      })
+    );
+  };
+
   componentWillMount() {
     const authToken = localStorage.getItem("cah-token");
 
-    if (authToken) {
-      apiClient("GET", "/auth")
-        .then(res => {
-          if (res.is_authenticated) {
-            this.setState(
-              produce(draft => {
-                draft.checkingAuthentication = false;
-                draft.isAuthenticated = true;
-              })
-            );
-          } else {
-            localStorage.removeItem("cah-token");
-            this.setState(
-              produce(draft => {
-                draft.checkingAuthentication = false;
-              })
-            );
-          }
-        })
-        .catch(_ => {
-          localStorage.removeItem("cah-token");
-          this.setState(
-            produce(draft => {
-              draft.checkingAuthentication = false;
-            })
-          );
-        });
-    } else {
+    if (!authToken) {
       this.setState(
         produce(draft => {
           draft.checkingAuthentication = false;
         })
       );
+      
+      return;
     }
+
+    apiClient("GET", "/auth")
+      .then(res => {
+        if (res.is_authenticated) {
+          this.setState(
+            produce(draft => {
+              draft.checkingAuthentication = false;
+              draft.isAuthenticated = true;
+            })
+          );
+        } else {
+          this.removeAuthAndFinishCheck();
+        }
+      })
+      .catch(_ => {
+        this.removeAuthAndFinishCheck();
+      });
   }
 
   setAuth = (isAuth) => {
