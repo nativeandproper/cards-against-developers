@@ -1,5 +1,3 @@
-import env from "../config/development";
-
 const defaultHeaders = {
   "Content-Type": "application/json"
 };
@@ -11,9 +9,8 @@ export default function api(method, url, data, opts = {}) {
     defaultHeaders.Authorization = token;
   }
 
-  return fetch(`${env.API_ROOT}${url}`, {
+  return fetch(`${process.env.REACT_APP_CAH_API_ROOT}${url}`, {
     body: JSON.stringify(data),
-    // TODO: include session token for api token for requests
     credentials: "include",
     headers: defaultHeaders,
     method: method.toUpperCase()

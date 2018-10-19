@@ -3,6 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import produce from "immer";
 
 import apiClient from "../lib/apiClient";
+import { withAuthContext } from "../lib/contextLib";
 import {
   invalidFirstName,
   invalidLastName,
@@ -28,6 +29,12 @@ class Signup extends React.Component {
       password: "",
       passwordHasError: false
     };
+  }
+
+  componentWillMount() {
+    if (this.props.isAuthenticated) {
+      this.props.history.push("/dashboard/api-keys");
+    }
   }
 
   handleChange = (key, value) => {
@@ -180,4 +187,4 @@ class Signup extends React.Component {
   }
 }
 
-export default withRouter(Signup);
+export default withAuthContext(withRouter(Signup));

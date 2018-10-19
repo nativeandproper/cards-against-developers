@@ -1,5 +1,7 @@
 import React from "react";
 
+import { withAuthContext } from "../lib/contextLib";
+
 // Components
 import ButtonLink from "../components/ButtonLink";
 
@@ -7,13 +9,19 @@ import ButtonLink from "../components/ButtonLink";
 import "../styles/Buttons.css";
 import "../styles/Home.css";
 
-export default class Home extends React.Component {
+class Home extends React.Component {
+  componentWillMount() {
+    if (this.props.isAuthenticated) {
+      this.props.history.push("/dashboard/api-keys");
+    }
+  }
+  
   render() {
     return (
       <div className="home">
         <div className="home-nav">
-          <ButtonLink to="/about" classes="common-button nav-button" name="about" />
-          <a className="common-button nav-button" href="https://www.gitbook.com/">
+          <ButtonLink to="/about" name="about" />
+          <a href={process.env.REACT_APP_CAH_API_DOCS_URL} target="_blank" rel="noopener noreferrer" className="common-button nav-button">
             docs
           </a>
         </div>
@@ -27,10 +35,12 @@ export default class Home extends React.Component {
               human beings.
             </h2>
           </div>
-          <div className="login-signup-buttons">
-            <ButtonLink to="/login" classes="common-button nav-button" name="log in" />
-            <ButtonLink to="/signup" classes="common-button nav-button" name="sign up" />
-          </div>
+          {!this.props.isAuthenticated && (
+            <div className="login-signup-buttons">
+              <ButtonLink to="/login" name="log in" />
+              <ButtonLink to="/signup" name="sign up" />
+            </div>
+          )}
         </div>
         <div className="title">
           <h1>cards against developers</h1>
@@ -39,3 +49,5 @@ export default class Home extends React.Component {
     );
   }
 }
+
+export default withAuthContext(Home);

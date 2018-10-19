@@ -1,10 +1,11 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Link, Redirect } from "react-router-dom";
 import produce from "immer";
 import * as R from "ramda";
 
 import apiClient from "../lib/apiClient";
 import { jwtDecode } from "../lib/localStorage";
+import { withAuthContext } from "../lib/contextLib";
 
 // Components
 import DashboardApiKeys from "./DashboardApiKeys";
@@ -15,7 +16,7 @@ import DashboardUserSettings from "./DashboardUserSettings";
 import "../styles/Dashboard.css";
 import "../styles/Buttons.css";
 
-export default class Dashboard extends React.Component {
+class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
@@ -32,9 +33,14 @@ export default class Dashboard extends React.Component {
 
   componentDidMount() {
     const authToken = localStorage.getItem("cah-token");
+    const tokenError = "We had a problem fetching your information. Please log out and log in again.";
 
     if (!authToken) {
-      // TODO: check if token exists and handle
+      this.setState(
+        produce(draft => {
+          draft.error = tokenError;
+        })
+      )
     }
 
     const decoded = jwtDecode(authToken);
@@ -42,7 +48,7 @@ export default class Dashboard extends React.Component {
     if (decoded === null) {
       this.setState(
         produce(draft => {
-          draft.error = "Error fetching your information. Please log out and log in again.";
+          draft.error = tokenError;
         })
       );
     }
@@ -89,7 +95,9 @@ export default class Dashboard extends React.Component {
     apiClient("POST", "/logout")
       .then(res => {
         localStorage.removeItem("cah-token");
-        this.props.history.push("/login", null);
+
+        this.props.setAuth(false);
+        this.props.history.push("/", null);
       })
       .catch(err => {
         err.text().then(errorMsg => {
@@ -179,9 +187,12 @@ export default class Dashboard extends React.Component {
 
   render() {
     return (
-      <Router>
+      <BrowserRouter>
         <div className="dashboard">
           <div className="dashboard-nav">
+            <a href={process.env.REACT_APP_CAH_API_DOCS_URL} target="_blank" rel="noopener noreferrer" className="common-button nav-button">
+              docs
+            </a>
             <a className="common-button nav-button" onClick={this.onLogout}>
               log out
             </a>
@@ -196,30 +207,35 @@ export default class Dashboard extends React.Component {
             </div>
           </div>
 
-          <Route
-            path="/dashboard/api-keys"
-            render={props => (
-              <DashboardApiKeys
-                {...props}
-                apiKeys={this.state.apiKeys}
-                copyApiKey={this.copyApiKey}
-                createApiKey={this.createApiKey}
-                deleteApiKey={this.deleteApiKey}
-                error={this.state.error}
-                isLoading={this.state.isLoading}
-              />
-            )}
-          />
-          <Route
-            path="/dashboard/stats"
-            component={DashboardStats}
-          />
-          <Route
-            path="/dashboard/settings"
-            component={DashboardUserSettings}
-          />
+          <Switch>
+            <Route
+              path="/dashboard/api-keys"
+              render={props => (
+                <DashboardApiKeys
+                  {...props}
+                  apiKeys={this.state.apiKeys}
+                  copyApiKey={this.copyApiKey}
+                  createApiKey={this.createApiKey}
+                  deleteApiKey={this.deleteApiKey}
+                  error={this.state.error}
+                  isLoading={this.state.isLoading}
+                />
+              )}
+            />
+            <Route
+              path="/dashboard/stats"
+              component={DashboardStats}
+            />
+            <Route
+              path="/dashboard/settings"
+              component={DashboardUserSettings}
+            />
+            <Redirect from="/dashboard" to="/dashboard/api-keys" />
+          </Switch>
         </div>
-      </Router>
+      </BrowserRouter>
     );
   }
 }
+
+export default withAuthContext(Dashboard);
