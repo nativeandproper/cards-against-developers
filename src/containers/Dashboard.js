@@ -1,4 +1,5 @@
 import React from "react";
+// eslint-disable-next-line
 import { BrowserRouter, Route, Switch, Link, Redirect } from "react-router-dom";
 import produce from "immer";
 import * as R from "ramda";
@@ -200,11 +201,11 @@ class Dashboard extends React.Component {
 
           <div className="dashboard-header">
             <h1>Developer Portal</h1>
-            <div className="dashboard-secondary-nav">
+            {/* <div className="dashboard-secondary-nav">
               <Link to="/dashboard/api-keys">api keys</Link>
               <Link to="/dashboard/stats">stats</Link>
               <Link to="/dashboard/settings">settings</Link>
-            </div>
+            </div> */}
           </div>
 
           <Switch>
